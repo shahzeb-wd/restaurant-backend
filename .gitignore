@@ -47,7 +47,7 @@ temp/
 # IDE / Editor settings
 .vscode/
 .idea/
-*.suo
+*.su
 *.ntvs*
 *.njsproj
 *.sln
