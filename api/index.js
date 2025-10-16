@@ -1,6 +1,9 @@
 // api/index.js
+import serverless from "serverless-http";
 import app from "../src/app.js";
+import { DbConnect } from "../src/libs/db.js";
 
-export default async function handler(req, res) {
-  return app(req, res);
-}
+// Connect to MongoDB (serverless friendly)
+DbConnect();
+
+export default serverless(app);
