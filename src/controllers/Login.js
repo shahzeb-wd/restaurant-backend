@@ -6,6 +6,7 @@ import { ApiResponse } from "../libs/apiResponse.js";
 
 export const Login = async (req, res) => {
   try {
+    console.log("Incoming body:", req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {

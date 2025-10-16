@@ -1,24 +1,8 @@
-import express from "express";
-import dotenv from "dotenv";
+// api/index.js
+import serverless from "serverless-http";
+import app from "./app.js"; // your existing Express app
 import { DbConnect } from "./libs/db.js";
-import AuthRoutes from "./routes/AuthRoutes.js";
-import { CreateAdmin } from "./controllers/Auth.js";
-import cookieParser from "cookie-parser";
-import CategoryRoutes from "./routes/admin/CategoryRoutes.js";
-import MenuRoutes from "./routes/admin/MenuRoutes.js";
-import OrderRoutes from "./routes/user/OrderRoutes.js";
-import ProfileRoutes from "./routes/ProfileRoutes.js";
-dotenv.config();
-const app = express();
-const PORT = process.env.PORT || 5000;
-DbConnect();
-app.use(express.json());
-app.use(cookieParser());
-app.use("/api/auth", AuthRoutes);
-app.use("/api", ProfileRoutes);
-app.use("/api/admin", CategoryRoutes);
-app.use("/api/admin", MenuRoutes);
-app.use("/api/user", OrderRoutes);
-app.listen(PORT, () => {
-  console.log(`App is Running on ${PORT}`);
-});
+
+DbConnect(); // connect to MongoDB
+
+export default serverless(app);

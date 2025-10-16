@@ -70,6 +70,61 @@ export const GetMenu = async (req, res) => {
     return ApiResponse.serverError(res);
   }
 };
+export const GetSignleMenu = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const menu = await MenuModel.findById(id);
+
+    if (!id) {
+      return res.status(404).json({
+        success: false,
+        message: "Plz Send Menu Id.",
+      });
+    }
+    if (!menu) {
+      return res.status(404).json({
+        success: false,
+        message: "No record found with the given id.",
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "Menu Fetched successfully",
+      data: menu,
+    });
+  } catch (error) {
+    console.error(error);
+    return ApiResponse.serverError(res);
+  }
+};
+export const GetMenuByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    if (!categoryId) {
+      return ApiResponse.badRequest(res, "Please provide a category ID.");
+    }
+
+    const menuItems = await MenuModel.find({ categoryId });
+
+    if (menuItems.length === 0) {
+      return ApiResponse.notFound(
+        res,
+        "No menu items found for this category."
+      );
+    }
+
+    return ApiResponse.success(
+      res,
+      "Menu items fetched successfully.",
+      menuItems
+    );
+  } catch (error) {
+    console.error("GetMenuByCategory Error:", error);
+    return ApiResponse.serverError(res);
+  }
+};
 export const UpdateMenu = async (req, res) => {
   try {
     const { id } = req.params;

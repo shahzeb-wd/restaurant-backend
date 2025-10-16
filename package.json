@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/shahzeb-wd/restaurant-backend.git"
   },
-  "author": "shahze",
+  "author": "shahzeb",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/shahzeb-wd/restaurant-backend/issues"
@@ -20,14 +20,17 @@
   "homepage": "https://github.com/shahzeb-wd/restaurant-backend#readme",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1",
+    "mongodb": "6.8.0",
+    "mongoose": "8.6.0",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.9",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "serverless-http": "^4.0.0"
   }
 }

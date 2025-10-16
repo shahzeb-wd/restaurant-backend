@@ -46,6 +46,7 @@ export const GetCategory = async (req, res) => {
     return ApiResponse.serverError(res);
   }
 };
+
 export const UpdateCategory = async (req, res) => {
   try {
     const { id } = req.params;
