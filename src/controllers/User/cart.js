@@ -31,7 +31,7 @@ export const GetCart = async (req, res) => {
   try {
     const GetCart = await CartModel.find();
     if (GetCart.length == 0) {
-      ApiResponse.notFound(res);
+      return ApiResponse.notFound(res);
     }
 
     return ApiResponse.success(res, "Card Data Fetched Successfully.", GetCart);

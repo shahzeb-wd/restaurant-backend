@@ -26,17 +26,17 @@ app.post("/test", (req, res) => {
   res.json({ received: req.body });
 });
 
-app.use("/api/auth", AuthRoutes);
 app.use("/api/admin", AuthRoutesAdmin);
 app.use("/api/admin", CategoryRoutes);
 app.use("/api/admin", MenuRoutes);
-app.use("/api/user", UserOrderRoutes);
-app.use("/api/admin", AdminOrderRoutes);
 app.use("/api/admin", AdminUserRoutes);
+app.use("/api/admin", AdminTableRoutes);
+app.use("/api/admin", AdminOrderRoutes);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/user", UserOrderRoutes);
 app.use("/api", MenuCatRoutes);
 app.use("/api", CartRoutes);
 app.use("/api", TableRoutes);
-app.use("/api/admin", AdminTableRoutes);
 
 app.get("/", (req, res) => {
   res.send("🍔 Restaurant Backend API is running!");
