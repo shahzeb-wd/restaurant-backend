@@ -16,7 +16,7 @@ export const ApiResponse = {
     });
   },
 
-  notFound: (res, message = "Data not found") => {
+  notFound: (res, message = "Data not found", data) => {
     return res.status(404).json({
       success: false,
       message,
