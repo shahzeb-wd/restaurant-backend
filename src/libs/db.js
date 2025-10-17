@@ -18,7 +18,7 @@ let isConnected = false; // cache the connection
 
 export const DbConnect = async () => {
   if (isConnected) return; // don't reconnect on every function call
-
+  console.log("Connecting started");
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
