@@ -21,7 +21,7 @@ import { DbConnect } from "./libs/db.js";
 dotenv.config();
 
 // Connect to database
-DbConnect();
+await DbConnect();
 
 // Export app as a serverless function
 export default serverless(app);
