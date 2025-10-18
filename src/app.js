@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
-
+import cors from "cors";
 // Routes
 import CategoryRoutes from "./routes/admin/CategoryRoutes.js";
 import MenuRoutes from "./routes/admin/MenuRoutes.js";
@@ -18,6 +18,19 @@ import AdminTableRoutes from "./routes/admin/TableRoutes.js";
 
 dotenv.config();
 const app = express();
+
+const allowedOrigins = [
+  "http://localhost:3000", // your frontend dev server
+  "https://yourdomain.com", // your production frontend
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // ✅ allows cookies, tokens, etc.
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
