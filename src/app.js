@@ -19,16 +19,11 @@ import AdminTableRoutes from "./routes/admin/TableRoutes.js";
 dotenv.config();
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000", // for local frontend
-  "https://your-frontend.vercel.app", // for production
-];
-
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "http://localhost:3000", // your local frontend
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // ✅ allows cookie headers
+    credentials: true, // allows cookies to be sent
   })
 );
 

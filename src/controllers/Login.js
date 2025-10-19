@@ -34,11 +34,11 @@ export const Login = async (req, res) => {
       );
 
       res.cookie("token", token, {
-        httpOnly: true,
-        secure: false, // because localhost is not HTTPS
-        sameSite: "None",
-        path: "/",
-        maxAge: 2 * 60 * 60 * 1000,
+        httpOnly: true, // cannot be accessed by JS
+        secure: false, // false because localhost is HTTP
+        sameSite: "None", // required for cross-site cookies
+        path: "/", // accessible for all routes
+        maxAge: 2 * 60 * 60 * 1000, // 2 hours
       });
 
       return res.status(200).json({
