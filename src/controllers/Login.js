@@ -35,8 +35,9 @@ export const Login = async (req, res) => {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: true, // ✅ required by Vercel (always HTTPS)
-        sameSite: "none", // ✅ required for cross-origin cookies
+        secure: process.env.NODE_ENV === "production", // true on Vercel
+        sameSite: "None", // ❗ required for cross-site cookies
+        domain: ".vercel.app", // ✅ works across all Vercel subdomains
         path: "/",
         maxAge: 2 * 60 * 60 * 1000, // 2 hours
       });
