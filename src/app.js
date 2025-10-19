@@ -20,15 +20,15 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:3000", // your frontend dev server
-  "https://yourdomain.com", // your production frontend
+  "http://localhost:3000", // for local frontend
+  "https://your-frontend.vercel.app", // for production
 ];
 
 app.use(
   cors({
     origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // ✅ allows cookies, tokens, etc.
+    credentials: true, // ✅ allows cookie headers
   })
 );
 
