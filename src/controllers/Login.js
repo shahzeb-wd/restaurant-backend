@@ -41,7 +41,6 @@ export const Login = async (req, res) => {
         path: "/",
       });
 
-      s;
       return res.status(200).json({
         success: true,
         role: "admin",
