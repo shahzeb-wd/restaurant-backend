@@ -32,15 +32,12 @@ export const Login = async (req, res) => {
         process.env.JWT_SECRET || "mysecretkey",
         { expiresIn: "2h" }
       );
-
       res.cookie("token", token, {
-        httpOnly: true, // cannot be accessed by JS
-        secure: false, // false because localhost is HTTP
-        sameSite: "None", // required for cross-site cookies
-        path: "/", // accessible for all routes
-        maxAge: 2 * 60 * 60 * 1000, // 2 hours
+        httpOnly: true,
+        secure: false, // must be false on localhost
+        sameSite: "lax", // default works fine
+        path: "/", // important so /admin can read it
       });
-
       return res.status(200).json({
         success: true,
         role: "admin",

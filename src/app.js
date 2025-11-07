@@ -15,6 +15,7 @@ import TableRoutes from "./routes/user/TableRoutes.js";
 import AuthRoutes from "./routes/user/AuthRoutes.js";
 import AuthRoutesAdmin from "./routes/admin/authRoutes.js";
 import AdminTableRoutes from "./routes/admin/TableRoutes.js";
+import AdminDashboardRoute from "./routes/admin/dashboardRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -43,6 +44,7 @@ app.use("/api/admin", MenuRoutes);
 app.use("/api/admin", AdminUserRoutes);
 app.use("/api/admin", AdminTableRoutes);
 app.use("/api/admin", AdminOrderRoutes);
+app.use("/api/admin", AdminDashboardRoute);
 
 // User routes
 app.use("/api/auth", AuthRoutes);

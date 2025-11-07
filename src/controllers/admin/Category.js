@@ -35,11 +35,49 @@ export const GetCategory = async (req, res) => {
         message: "No categories found",
       });
     }
+    const result = await CategoryModel.aggregate([
+      {
+        $lookup: {
+          from: "menus", // the other collection
+          localField: "_id", // category _id
+          foreignField: "categoryId", // menus.categoryId
+          as: "items", // store joined menus in "items"
+        },
+      },
+
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          itemCount: { $size: "$items" }, // number of menus
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          categories: { $push: "$$ROOT" },
+          totlaItem: { $sum: "$itemCount" },
+          averageItemPerCategory: { $avg: "$itemCount" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          categories: 1,
+          totalItem: 1,
+          totalCategories: { $size: "$categories" },
+          averageItemPerCategory: 1,
+        },
+      },
+    ]);
 
     return res.status(201).json({
       success: true,
       message: "Categories Fetched successfully",
-      data: categories,
+      data: result[0],
     });
   } catch (error) {
     console.error(error);

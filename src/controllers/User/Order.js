@@ -1,28 +1,27 @@
-import mongoose from "mongoose";
 import { OrderModel } from "../../models/Order.js";
 import { ApiResponse } from "../../libs/apiResponse.js";
 import { MenuModel } from "../../models/menu.js";
 
+// ✅ Place order (used by customers)
 export const PlaceOrder = async (req, res) => {
   try {
     const { userId, items, totalAmount, paymentMethod } = req.body;
 
     if (!userId || !items || !totalAmount || !paymentMethod) {
-      return res.status(400).json({
-        success: false,
-        message: "Some required fields are Missing.",
-      });
+      return ApiResponse.badRequest(res, "Some required fields are missing.");
     }
 
+    // Validate menu items
     for (const i of items) {
       const menuItem = await MenuModel.findById(i.itemId);
       if (!menuItem) {
-        return res.status(400).json({
-          success: false,
-          message: `Menu item with ID ${i.itemId} does not exist.`,
-        });
+        return ApiResponse.badRequest(
+          res,
+          `Menu item with ID ${i.itemId} does not exist.`
+        );
       }
     }
+
     const newOrder = new OrderModel({
       userId,
       items,
@@ -30,61 +29,60 @@ export const PlaceOrder = async (req, res) => {
       paymentMethod,
     });
     await newOrder.save();
-    return ApiResponse.success(res, "Order Placed Successfully.", newOrder);
+
+    return ApiResponse.success(res, "Order placed successfully.", newOrder);
   } catch (error) {
-    console.error("Order Place Error:", error);
+    console.error("PlaceOrder Error:", error);
     return ApiResponse.serverError(res);
   }
 };
+
+// ✅ Get all orders (admin)
 export const GetAllOrder = async (req, res) => {
   try {
-    const GetOrders = await OrderModel.findOne();
-    if (GetOrders.length == 0) {
-      ApiResponse.notFound(res);
+    const orders = await OrderModel.find()
+      .populate("userId", "name email")
+      .sort({ createdAt: -1 });
+
+    if (!orders || orders.length === 0) {
+      return ApiResponse.notFound(res, "No orders found.");
     }
 
-    return ApiResponse.success(
-      res,
-      "All Orders Fetched Successfully.",
-      GetOrders
-    );
+    return ApiResponse.success(res, "Orders fetched successfully.", orders);
   } catch (error) {
-    console.error("UpdateProfile Error:", error);
+    console.error("GetAllOrder Error:", error);
     return ApiResponse.serverError(res);
   }
 };
+
+// ✅ Get single order (admin)
 export const GetOrder = async (req, res) => {
   const { id } = req.params;
   try {
-    const GetOrders = await OrderModel.findById(id);
-    if (!id) {
-      ApiResponse.notFound(res, "Please enter a valid ID.");
-    }
-    if (!GetOrders) {
-      ApiResponse.notFound(res, "Data not Found with the Id");
-    }
+    if (!id) return ApiResponse.badRequest(res, "Invalid ID provided.");
 
-    return ApiResponse.success(res, "Order Fetched Successfully.", GetOrders);
+    const order = await OrderModel.findById(id).populate(
+      "userId",
+      "name email"
+    );
+    if (!order) return ApiResponse.notFound(res, "Order not found.");
+
+    return ApiResponse.success(res, "Order fetched successfully.", order);
   } catch (error) {
-    console.error("UpdateProfile Error:", error);
+    console.error("GetOrder Error:", error);
     return ApiResponse.serverError(res);
   }
 };
 
+// ✅ Update order status (admin)
 export const UpdateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!id) {
-      return ApiResponse.notFound(res, "Please enter a valid ID.");
-    }
+    if (!id) return ApiResponse.badRequest(res, "Invalid ID.");
+    if (!status) return ApiResponse.badRequest(res, "Status is required.");
 
-    if (!status) {
-      return ApiResponse.notFound(res, "Please provide a status.");
-    }
-
-    // Validate status against enum
     const validStatuses = [
       "Pending",
       "Preparing",
@@ -92,20 +90,18 @@ export const UpdateOrderStatus = async (req, res) => {
       "Delivered",
       "Cancelled",
     ];
+
     if (!validStatuses.includes(status)) {
-      return ApiResponse.notFound(res, "Invalid status value.");
+      return ApiResponse.badRequest(res, "Invalid status value.");
     }
 
-    // Update order status
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       id,
       { orderStatus: status },
-      { new: true } // return updated document
+      { new: true }
     );
 
-    if (!updatedOrder) {
-      return ApiResponse.notFound(res, "Order not found with the given ID.");
-    }
+    if (!updatedOrder) return ApiResponse.notFound(res, "Order not found.");
 
     return ApiResponse.success(
       res,
