@@ -22,7 +22,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // your local frontend
+    origin: [
+      "http://localhost:3000",
+      "https://restaurant-frontend-admin.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // allows cookies to be sent
   })
